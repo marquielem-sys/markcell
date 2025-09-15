@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Markcell - Assistência e Manutenção</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <header>
+    <div class="wrap topo">
+      <img src="img/logo.png" alt="Logo Markcell" class="logo">
+      <div class="brand">
+        <h1>Markcell Assistência e Manutenção</h1>
+        <p>Seu celular em boas mãos — rápido, confiável, profissional</p>
+      </div>
+
+      <nav class="menu" aria-label="menu principal">
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#horario">Horário</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-left">
+        <h2>Assistência Técnica especializada em placas, telas e softwares</h2>
+        <p>Atendemos todas as marcas. Diagnóstico rápido, peças de qualidade e garantia no serviço. Traga seu aparelho
+          ou peça uma avaliação remota pelo nosso pré-diagnóstico.</p>
+        <a class="cta" href="#contato">Agende uma avaliação</a>
+        <a class="cta whatsapp" href="https://wa.me/5577999292656" target="_blank">Chamar no WhatsApp</a>
+      </div>
+      <div class="hero-right">
+        <img src="img/fundo.png" alt="Reparo de celular exemplo">
+      </div>
+    </section>
+
+    <section id="servicos" aria-labelledby="servicos-title">
+      <h2 id="servicos-title" style="margin-top:8px">Nossos Serviços</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Troca de Tela</h3>
+          <p>Troca rápida com peças de qualidade e teste completo antes da entrega.</p>
+        </div>
+        <div class="card">
+          <h3>Recuperação de Placas</h3>
+          <p>Reparo e recuperação de placas com solda BGA e análise de componentes.</p>
+        </div>
+        <div class="card">
+          <h3>Diagnóstico de Bateria</h3>
+          <p>Troca de baterias, testes de carga e análise de consumo anormal.</p>
+        </div>
+        <div class="card">
+          <h3>Remoção de Vírus e Software</h3>
+          <p>Formatação, recuperação de dados e instalação do sistema com segurança.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre" style="margin-top:26px">
+      <h2>Sobre a Loja</h2>
+      <div class="card sobre-loja">
+        <p>Com mais de 15 anos de experiência, a Markcell oferece soluções em manutenção de celulares com transparência,
+          peças certificadas e garantia.</p>
+        <p>Atendimento profissional e suporte pós-reparo — buscamos a fidelização pelo serviço bem feito.</p>
+      </div>
+    </section>
+
+    <section id="horario" style="margin-top:18px">
+      <h2>Horário de Atendimento</h2>
+      <div class="card horario-atendimento">
+        <ul>
+          <li>Seg a Sex: 08h — 18h</li>
+          <li>Sábado: até 12h</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="strip" style="margin-top:22px">
+      <p>Precisa de diagnóstico rápido?</p>
+      <div>
+        <a class="cta" href="#contato">Agendar</a>
+        <a class="cta whatsapp" href="https://wa.me/5577999292656" target="_blank">WhatsApp</a>
+        <a class="cta instagram" href="https://instagram.com/markcell_frp"" target="_blank">Instagram</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="contato">
+    <div class="wrap" style="padding:18px 20px">
+      <p style="color:#fff">© <span id="ano"></span> Markcell — Assistência Técnica de Celulares</p>
+    </div>
+  </footer>
+
+  <!-- Chat widget toggle -->
+  <div class="chat-toggle" id="chatToggle">Pré-diagnóstico</div>
+
+  <!-- Chat widget -->
+  <div class="chatbox" id="chatbox" aria-hidden="true">
+    <div class="chat-header">
+      <strong>Pré-diagnóstico Markcell</strong>
+      <small style="opacity:.9;margin-left:auto">Resposta automática</small>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <!-- messages go here -->
+      <div class="msg">
+        <div class="bubble">Olá! Posso ajudar com um pré-diagnóstico. Quer começar?</div>
+      </div>
+    </div>
+    <div class="chat-actions" id="chatActions">
+      <button id="startBtn">Iniciar</button>
+      <button class="secondary" id="closeBtn">Fechar</button>
+    </div>
+  </div>
+
+  <script>
+    // set current year
+    document.getElementById('ano').textContent = new Date().getFullYear();
+
+    /* ===== Chatbot pré-diagnóstico (client-side) =====
+       Fluxo simples: perguntas sequenciais + análise básica.
+       - Não usa servidor. Para produção, pode integrar API (ex: Dialogflow / ChatGPT).
+    */
+    (function () {
+      const chatToggle = document.getElementById('chatToggle');
+      const chatbox = document.getElementById('chatbox');
+      const chatBody = document.getElementById('chatBody');
+      const chatActions = document.getElementById('chatActions');
+      const startBtn = document.getElementById('startBtn');
+      const closeBtn = document.getElementById('closeBtn');
+
+      let state = { step: 0, answers: {} };
+
+      // utility to append message
+      function appendMessage(text, fromUser = false) {
+        const m = document.createElement('div');
+        m.className = 'msg' + (fromUser ? ' user' : '');
+        const b = document.createElement('div');
+        b.className = 'bubble';
+        b.innerText = text;
+        m.appendChild(b);
+        chatBody.appendChild(m);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      function ask(question, opts) {
+        appendMessage(question, false);
+        // render options as buttons
+        const container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.gap = '8px';
+        container.style.flexWrap = 'wrap';
+        container.style.marginTop = '8px';
+        opts.forEach(o => {
+          const btn = document.createElement('button');
+          btn.textContent = o.label;
+          btn.style.padding = '8px';
+          btn.style.borderRadius = '8px';
+          btn.style.border = '1px solid #ddd';
+          btn.style.background = '#fff';
+          btn.style.cursor = 'pointer';
+          btn.onclick = () => {
+            appendMessage(o.label, true);
+            // small delay then continue
+            setTimeout(() => o.onClick(), 300);
+            container.remove();
+          };
+          container.appendChild(btn);
+        });
+        chatBody.appendChild(container);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      // analysis at end
+      function analyze(answers) {
+        // simple rule-based suggestions
+        const symptoms = answers.symptom || [];
+        let suggestions = [];
+        // water damage
+        if (symptoms.includes('molhou') || answers.wet === 'sim') {
+          suggestions.push('Pode ser corrosão/curto por contato com água — recomendamos trazer para limpeza profissional e diagnóstico da placa.');
+        }
+        // nao liga
+        if (symptoms.includes('nao_liga') || answers.power === 'nao') {
+          suggestions.push('Pode ser falha na bateria, conector de carga ou defeito na placa. Trazer para teste.');
+        }
+        // tela quebrada
+        if (symptoms.includes('tela_quebrada')) {
+          suggestions.push('Tela fisicamente danificada — troca de display provável. Verificaremos conector e touch.');
+        }
+        // touch sem funcionar
+        if (symptoms.includes('sem_touch')) {
+          suggestions.push('Sensor touch não responde — pode ser touch, conectores ou IC de touch; precisamos abrir o aparelho.');
+        }
+        // bateria drena
+        if (symptoms.includes('drena')) {
+          suggestions.push('Consumo anormal: análise de bateria, software e processo de calibração necessários.');
+        }
+        // sem sinal
+        if (symptoms.includes('sem_sinal')) {
+          suggestions.push('Problema de antena, RF ou configuração de software — diagnóstico em bancada recomendado.');
+        }
+        if (suggestions.length === 0) {
+          suggestions.push('Com base nas respostas, recomendamos uma análise presencial para diagnóstico preciso.');
+        }
+        // show suggestions
+        appendMessage('Resultado do pré-diagnóstico:');
+        suggestions.forEach(s => appendMessage('• ' + s));
+        appendMessage('Deseja agendar atendimento ou conversar no WhatsApp?', false);
+        // show action buttons
+        const cont = document.createElement('div');
+        cont.style.display = 'flex'; cont.style.gap = '8px';
+        const w = document.createElement('a');
+        w.href = 'https://wa.me/5577999292656';
+        w.target = '_blank';
+        w.textContent = 'Abrir WhatsApp';
+        w.style.padding = '8px'; w.style.background = '#25d366'; w.style.color = '#fff'; w.style.borderRadius = '8px';
+        cont.appendChild(w);
+        const ag = document.createElement('button');
+        ag.textContent = 'Agendar visita';
+        ag.style.padding = '8px'; ag.style.borderRadius = '8px';
+        ag.onclick = () => { appendMessage('Ótimo — ligue para nossa loja ou envie uma mensagem no WhatsApp.'); }
+        cont.appendChild(ag);
+        chatBody.appendChild(cont);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      // flow definition
+      function startFlow() {
+        state = { step: 1, answers: {} };
+        chatBody.innerHTML = '';
+        appendMessage('Vamos começar. Primeiro, qual é a marca do aparelho?');
+        // ask brand free text
+        const inputDiv = document.createElement('div');
+        inputDiv.style.marginTop = '8px';
+        const input = document.createElement('input');
+        input.placeholder = 'Ex: Samsung, Apple, Xiaomi...';
+        input.style.padding = '8px'; input.style.width = '100%'; input.style.borderRadius = '8px'; input.style.border = '1px solid #ddd';
+        const btn = document.createElement('button');
+        btn.textContent = 'Enviar';
+        btn.style.marginTop = '8px'; btn.style.padding = '8px'; btn.style.width = '100%'; btn.style.borderRadius = '8px'; btn.style.background = '#013569'; btn.style.color = '#fff';
+        btn.onclick = () => {
+          const val = input.value.trim() || 'Não informado';
+          appendMessage(val, true);
+          state.answers.brand = val;
+          // next question
+          inputDiv.remove();
+          // ask symptom (multiple choice)
+          ask('Qual o principal problema que você percebe no aparelho?', [
+            { label: 'Não liga', onClick: () => { state.answers.symptom = ['nao_liga']; askBattery(); } },
+            { label: 'Tela quebrou', onClick: () => { state.answers.symptom = ['tela_quebrada']; askOther(); } },
+            { label: 'Sem touch', onClick: () => { state.answers.symptom = ['sem_touch']; askOther(); } },
+            { label: 'Molhou', onClick: () => { state.answers.symptom = ['molhou']; askOther(); } },
+            { label: 'Bateria drena rápido', onClick: () => { state.answers.symptom = ['drena']; askOther(); } },
+            { label: 'Sem sinal', onClick: () => { state.answers.symptom = ['sem_sinal']; askOther(); } },
+            { label: 'Outro', onClick: () => { state.answers.symptom = ['outro']; askOther(); } },
+          ]);
+        };
+        inputDiv.appendChild(input); inputDiv.appendChild(btn);
+        chatBody.appendChild(inputDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      function askBattery() {
+        ask('Ao conectar o carregador, aparece algo na tela ou o aparelho dá sinal de carga?', [
+          { label: 'Sim, carrega normalmente', onClick: () => { state.answers.power = 'sim'; askOther(); } },
+          { label: 'Não, não dá sinal', onClick: () => { state.answers.power = 'nao'; askOther(); } },
+        ]);
+      }
+
+      function askOther() {
+        // ask if device got wet (if not already)
+        ask('O aparelho já molhou ou teve contato com líquido?', [
+          { label: 'Sim', onClick: () => { state.answers.wet = 'sim'; finish(); } },
+          { label: 'Não', onClick: () => { state.answers.wet = 'nao'; finish(); } },
+        ]);
+      }
+
+      function finish() {
+        // do analysis
+        analyze(state.answers);
+      }
+
+      // open/close
+      chatToggle.onclick = () => {
+        chatbox.classList.toggle('open');
+        chatbox.setAttribute('aria-hidden', chatbox.classList.contains('open') ? 'false' : 'true');
+      };
+      closeBtn.onclick = () => chatbox.classList.remove('open');
+      startBtn.onclick = () => startFlow();
+
+    })();
+  </script>
+
+</body>
+
+</html>
